@@ -252,7 +252,11 @@ int main()
     glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
     glm::mat4 trans = glm::mat4(1.0f);
-    trans = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5, -0.5, 1));
+    trans = glm::translate(trans, glm::vec3(0.5, 0.5, 0.5));
+    trans = glm::rotate(trans, glm::radians(30.0f), glm::vec3(0.0, 0.0, 1.0));
+    trans = glm::scale(trans, glm::vec3(2.0, 0.5, 3.0));
+    trans = glm::translate(trans, glm::vec3(0, 0, 0));
+
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
     std::cout << "Camera position" << std::endl;

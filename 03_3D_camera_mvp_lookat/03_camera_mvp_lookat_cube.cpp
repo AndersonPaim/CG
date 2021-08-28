@@ -21,6 +21,7 @@ Based on LearnOpenGL
 
 static int width = 800, height = 600;
 float dx = 0.0f, dy = 0.0f, dz = 5.0f;
+float rot = 0;
 glm::mat4 view = glm::mat4(1.0);
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
@@ -71,6 +72,28 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     else if (key == GLFW_KEY_P && action == GLFW_PRESS) {
         std::cout << "dx,dy,dz = (" << dx << "," << dy << "," << dz << ")" << std::endl;
         std::cout << "view matrix " << glm::to_string(view) << std::endl;
+    }
+    else if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
+    {
+        if (rot < 360)
+        {
+            rot += 5;
+        }
+        else
+        {
+            rot = 0;
+        }
+    }
+    else if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
+    {
+        if (rot <= 0)
+        {
+            rot = 360;
+        }
+        else
+        {
+            rot -= 5;
+        }
     }
 }
 
@@ -251,14 +274,6 @@ int main()
     unsigned int projLoc = glGetUniformLocation(shaderProgram, "projection");
     glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-    glm::mat4 trans = glm::mat4(1.0f);
-    trans = glm::translate(trans, glm::vec3(0.5, 0.5, 0.5));
-    trans = glm::rotate(trans, glm::radians(30.0f), glm::vec3(0.0, 0.0, 1.0));
-    trans = glm::scale(trans, glm::vec3(2.0, 0.5, 3.0));
-    trans = glm::translate(trans, glm::vec3(0, 0, 0));
-
-    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(trans));
-
     std::cout << "Camera position" << std::endl;
     std::cout << "dx,dy,dz = (" << dx << "," << dy << "," << dz << ")" << std::endl;
     // rendering loop
@@ -274,6 +289,7 @@ int main()
         // camera/view transformation
         view = glm::mat4(1.0f);
         view = glm::lookAt(glm::vec3(dx, dy, dz), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        view = glm::rotate(view, glm::radians(rot), glm::vec3(0.0, 1.0, 0.0));
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
 
 
